@@ -10,6 +10,7 @@ export default function Navbar() {
                               width={178}
                               height={61}
                               alt='Logo SportSee'
+                              priority
                         />
                   </div>
                   <div className=''>

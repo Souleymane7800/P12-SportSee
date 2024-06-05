@@ -1,8 +1,12 @@
-import Calories from "../data/Calories";
+import React from "react";
 import DailyActivities from "../data/DailyActivities";
+import Goals from "../data/Goals";
+import Radar from "../data/Radar";
+import Kpi from "../data/Kpi";
+import Calories from "../data/Calories";
 import Glucides from "../data/Glucides";
-import Lipides from "../data/Lipides";
 import Proteines from "../data/Proteines";
+import Lipides from "../data/Lipides";
 
 export default function PageContent() {
   return (
@@ -20,8 +24,12 @@ export default function PageContent() {
       <div className="flex space-x-[31px]">
         <div className="flex-row space-y-[28px]">
           <DailyActivities />
+          <div className="flex space-x-[30px]">
+            <Goals />
+            <Radar />
+            <Kpi />
+          </div>
         </div>
-
         <div className="flex-row space-y-[39px]">
           <Calories />
           <Proteines />

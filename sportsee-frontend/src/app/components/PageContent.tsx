@@ -1,4 +1,5 @@
 import Calories from "../data/Calories";
+import DailyActivities from "../data/DailyActivities";
 import Glucides from "../data/Glucides";
 import Lipides from "../data/Lipides";
 import Proteines from "../data/Proteines";
@@ -16,11 +17,17 @@ export default function PageContent() {
           Félicitations ! Vous avez explosé vos objectifs hier 👏
         </h2>
       </div>
-      <div className="flex-row space-y-[39px]">
-        <Calories />
-        <Proteines />
-        <Glucides />
-        <Lipides />
+      <div className="flex space-x-[31px]">
+        <div className="flex-row space-y-[28px]">
+          <DailyActivities />
+        </div>
+
+        <div className="flex-row space-y-[39px]">
+          <Calories />
+          <Proteines />
+          <Glucides />
+          <Lipides />
+        </div>
       </div>
     </div>
   );

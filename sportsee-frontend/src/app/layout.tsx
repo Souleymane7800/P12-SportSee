@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
+import { UserProvider } from "./providers/UserContext";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -48,7 +49,9 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" className="antialiased">
-        <body className={roboto.className}>{children}</body>
+        <UserProvider>
+          <body className={roboto.className}>{children}</body>
+        </UserProvider>
       </html>
     </>
   );

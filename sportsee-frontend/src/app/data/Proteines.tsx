@@ -15,7 +15,7 @@ export default function Proteines() {
                               <h1 className='font-bold text-[#282D30] text-xl'>
                                     155g
                               </h1>
-                              <h2 className='text-sm font-medium text-[#74798C] text-sm'>
+                              <h2 className='text-sm font-medium text-[#74798C]'>
                                     Proteines
                               </h2>
                         </div>

@@ -6,8 +6,10 @@ export const getUserInfos = async (userId: number): Promise<any> => {
     console.log('User',response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
-    return null;
+    // console.error(error);
+    // return null;
+    console.error("Error fetching user data:", error);
+    return { error: "Unable to fetch user data. Please try again later." };
   }
 };
 

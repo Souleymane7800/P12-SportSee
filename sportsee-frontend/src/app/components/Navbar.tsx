@@ -1,5 +1,8 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
+import ProfileDropdown from './ProfileDropdown';
 
 export default function Navbar() {
       return (
@@ -17,7 +20,8 @@ export default function Navbar() {
                         <nav className='font-medium '>
                               <ul className='flex text-2xl lg:gap-[219px] pr-[41px] font-medium gap-[50px]'>
                                     <li>Accueil</li>
-                                    <li>Profil</li>
+                                    <ProfileDropdown />
+                                    {/* <li>Profil</li> */}
                                     <li>Réglage</li>
                                     <li>Communauté</li>
                               </ul>

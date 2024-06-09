@@ -51,3 +51,16 @@ export const getUserPerformance = async (userId: number): Promise<any> => {
     return null;
   }
 };
+
+
+// export const getUserIds = async (): Promise<number[]> => {
+//   try {
+//     const response = await axios.get('http://localhost:3000');
+//     console.log('IDUSERS',response.data);
+    
+//     return response.data; // Assume the API returns an array of IDs
+//   } catch (error) {
+//     console.error(error);
+//     return [];
+//   }
+// };

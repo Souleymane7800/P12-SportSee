@@ -1,9 +1,150 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { getUserActivities } from "../API/GetData";
+import { useUser } from "../providers/UserContext";
+import { DataFormatter } from "../utils/dataFormatter";
+import {
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-export default function DailyActivities() {
-  return (
-    <div className='grid place-items-center border w-[835px] h-[320px]'>
-      Daily Activities graphic
-    </div>
-  )
+interface Session {
+  day: string;
+  kilogram: number;
+  calories: number;
 }
+
+interface CustomTooltipProps {
+  payload: { value: number }[];
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
+  if (payload && payload.length) {
+    return (
+      <div className="custom-tooltip grid h-[63px] w-[46px] place-items-center bg-[#E60000] text-[10px] font-medium text-white">
+        <p>{payload[0].value}kg</p>
+        <p>{payload[1].value}Kcal</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+// Composant de légende personnalisé
+const CustomLegend = (props: any) => {
+  const { payload } = props;
+  // Define custom labels based on data series
+  const labels = ["Poids (kg)", "Calories brûlées (kCal)"];
+  return (
+    <div className="flex flex-row justify-between items-center pl-[32px] pt-[24px]">
+      <h1 className=" font-medium">Activité quotidienne</h1>
+      <ul className="custom-legend flex flex-row items-start">
+        {payload.map((entry: any, index: number) => (
+          <li key={`item-${index}`} className="mr-4 flex items-center text-[#74798C] text-sm font-medium">
+            <span
+              className="mr-3"
+              style={{
+                display: "inline-block",
+                marginRight: 10,
+                borderRadius: "50%",
+                width: 10,
+                height: 10,
+                backgroundColor: entry.color,
+              }}
+            ></span>
+            {labels[index]} {/* Use labels based on index */}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const DailyActivities = () => {
+  const { userId } = useUser();
+  const [activityData, setActivityData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchActivityData = async () => {
+      if (userId) {
+        const userData = await getUserActivities(userId);
+        setActivityData(userData?.data?.sessions || []);
+      }
+    };
+    fetchActivityData();
+  }, [userId]);
+
+  const activityDataFormatted =
+    activityData?.map((session: Session) =>
+      DataFormatter.ActivityDataFormatter(session),
+    ) || [];
+
+  // const options = {
+  //   barThickness: 10, // Set global bar width
+  // };
+
+  return (
+    <div className="mx-auto flex h-[320px] w-[835px] items-center justify-center border">
+      {activityDataFormatted.length > 0 && (
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            width={500}
+            height={300}
+            barGap={10}
+            data={activityDataFormatted}
+            margin={{
+              top: 0,
+              right: 30,
+              left: 0,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="2 2" vertical={false} />
+            <XAxis
+              dataKey="day"
+              axisLine={false}
+              tickSize={19}
+              tickLine={false}
+              className="text-[#9B9EAC]"
+            />
+            <YAxis
+              dataKey="Poids"
+              orientation="right"
+              domain={[0, 400]}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip content={<CustomTooltip payload={[]} />} />
+            <Legend
+              content={<CustomLegend />}
+              verticalAlign="top"
+              align="right"
+              wrapperStyle={{
+                lineHeight: "60px",
+              }}
+            />
+            <Bar
+              dataKey="Poids"
+              fill="#282D30"
+              barSize={7}
+              radius={[20, 20, 0, 0]}
+            />
+            <Bar
+              dataKey="Calories"
+              fill="#E60000"
+              barSize={7}
+              radius={[20, 20, 0, 0]}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      )}
+    </div>
+  );
+};
+
+export default DailyActivities;

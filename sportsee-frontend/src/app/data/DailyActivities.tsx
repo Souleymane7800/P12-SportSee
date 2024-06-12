@@ -41,11 +41,14 @@ const CustomLegend = (props: any) => {
   // Define custom labels based on data series
   const labels = ["Poids (kg)", "Calories brûlées (kCal)"];
   return (
-    <div className="flex flex-row justify-between items-center pl-[32px] pt-[24px]">
-      <h1 className=" font-medium">Activité quotidienne</h1>
+    <div className="flex flex-row items-center justify-between pl-[32px] pt-[24px]">
+      <h1 className="font-medium">Activité quotidienne</h1>
       <ul className="custom-legend flex flex-row items-start">
         {payload.map((entry: any, index: number) => (
-          <li key={`item-${index}`} className="mr-4 flex items-center text-[#74798C] text-sm font-medium">
+          <li
+            key={`item-${index}`}
+            className="mr-4 flex items-center text-sm font-medium text-[#74798C]"
+          >
             <span
               className="mr-3"
               style={{
@@ -93,29 +96,30 @@ const DailyActivities = () => {
       {activityDataFormatted.length > 0 && (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            width={500}
-            height={300}
+            width={770}
+            height={184}
             barGap={10}
+            // barCategoryGap={10}
             data={activityDataFormatted}
-            margin={{
-              top: 0,
-              right: 30,
-              left: 0,
-              bottom: 5,
-            }}
+            // margin={{
+            //   top: 0,
+            //   right: 30,
+            //   left: 0,
+            //   bottom: 5,
+            // }}
           >
-            <CartesianGrid strokeDasharray="2 2" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="day"
               axisLine={false}
-              tickSize={19}
+              tickSize={15}
               tickLine={false}
               className="text-[#9B9EAC]"
             />
             <YAxis
               dataKey="Poids"
               orientation="right"
-              domain={[0, 400]}
+              domain={[0, 520]}
               axisLine={false}
               tickLine={false}
             />

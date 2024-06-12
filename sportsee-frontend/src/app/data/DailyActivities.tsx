@@ -41,7 +41,7 @@ const CustomLegend = (props: any) => {
   // Define custom labels based on data series
   const labels = ["Poids (kg)", "Calories brûlées (kCal)"];
   return (
-    <div className="flex flex-row items-center justify-between pl-[32px] pt-[24px]">
+    <div className="flex flex-row items-center justify-between pl-[32px] pt-[24px">
       <h1 className="font-medium">Activité quotidienne</h1>
       <ul className="custom-legend flex flex-row items-start">
         {payload.map((entry: any, index: number) => (
@@ -92,7 +92,7 @@ const DailyActivities = () => {
   // };
 
   return (
-    <div className="mx-auto flex h-[320px] w-[835px] items-center justify-center border">
+    <div className="mx-auto flex h-[320px] w-[835px] items-center justify-center border bg-gray-50">
       {activityDataFormatted.length > 0 && (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

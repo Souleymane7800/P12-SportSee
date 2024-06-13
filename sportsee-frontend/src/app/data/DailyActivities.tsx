@@ -84,7 +84,7 @@ const DailyActivities = () => {
 
   const activityDataFormatted =
     activityData?.map((session: Session) =>
-      DataFormatter.ActivityDataFormatter(session),
+      DataFormatter.activityDataFormatter(session),
     ) || [];
 
   // const options = {

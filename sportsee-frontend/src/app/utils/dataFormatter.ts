@@ -5,7 +5,7 @@ interface Session {
 }
 
 export class DataFormatter {
-  static ActivityDataFormatter(session: {
+  static activityDataFormatter(session: {
     day: string;
     kilogram: number;
     calories: number;
@@ -19,5 +19,34 @@ export class DataFormatter {
 
   static formatSessionDate(dayString: string): string {
     return dayString.toString(); // Extract date portion assuming YYYY-MM-DD format
+  }
+
+  static performanceDataFormatter(session: Session): { value: number; kind: string }[] {
+    const kindMap: { [key: number]: string } = {
+      1: "Cardio",
+      2: "Energie",
+      3: "Endurance",
+      4: "Force",
+      5: "Vitesse",
+      6: "Intensité",
+    };
+
+    const newOrder: string[] = [
+      "Intensité",
+      "Vitesse",
+      "Force",
+      "Endurance",
+      "Energie",
+      "Cardio",
+    ];
+
+    // Map session data to new format with kind as string
+    const newData = session?.data.data.map(({ value, kind }) => ({
+      value,
+      kind: kindMap[kind],
+    }));
+
+    // Return the newData sorted according to newOrder
+    return newOrder.map((kind) => newData?.find((obj) => obj.kind === kind)!);
   }
 }

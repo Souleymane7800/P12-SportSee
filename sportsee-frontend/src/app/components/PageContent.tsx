@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import DailyActivities from "../data/DailyActivities";
 import Goals from "../data/Goals";
-import Radar from "../data/Radar";
+import Radar from "../data/RadarFit";
 import Kpi from "../data/Kpi";
 import Calories from "../data/Calories";
 import Glucides from "../data/Glucides";

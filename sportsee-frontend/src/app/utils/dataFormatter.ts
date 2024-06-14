@@ -49,4 +49,11 @@ export class DataFormatter {
     // Return the newData sorted according to newOrder
     return newOrder.map((kind) => newData?.find((obj) => obj.kind === kind)!);
   }
+
+  static kpiDataFormatter(userData: any): {score: number; remaining:number} {
+    const scores = userData?.data?.todayScore || userData?.data?.score;
+      const score = scores * 100; // Format score
+      const remaining = 100 - score;
+      return { score, remaining };
+  }
 }

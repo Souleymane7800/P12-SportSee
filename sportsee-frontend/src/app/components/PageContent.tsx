@@ -12,11 +12,10 @@ import { getUserInfos } from "../API/GetData";
 import { useUser } from "../providers/UserContext";
 import { UserProvider } from "../providers/UserContext";
 
-
 export default function PageContent() {
   const { userId, setUserId, changeUser } = useUser();
   console.log(userId);
-  
+
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ export default function PageContent() {
 
     fetchUserInfo();
   }, [userId]);
-  
+
   return (
     <div className="h-[calc(100vh-91px w-[]calc(100vh-117px)] flex-grow pl-[107px]">
       <div className="space-y-[41px] pt-[68px]">

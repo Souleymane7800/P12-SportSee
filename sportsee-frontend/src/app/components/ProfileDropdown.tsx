@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import { useUser } from "../providers/UserContext";
+import { useRouter } from 'next/navigation'; // Utilisation de next/navigation
 
 const ProfileDropdown: React.FC = () => {
   const { changeUser } = useUser();
   const [showDropdown, setShowDropdown] = useState(false);
+  const router = useRouter();
 
   // Utilisateurs statiques
   const users = [
@@ -20,6 +22,7 @@ const ProfileDropdown: React.FC = () => {
   const handleUserSelect = (id: number) => {
     changeUser(id);
     setShowDropdown(false);
+    router.push(`/user/${id}`); // Utilisation de router.push pour la navigation
   };
 
   return (

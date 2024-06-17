@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useUser } from "../providers/UserContext";
-import { useRouter } from 'next/navigation'; // Utilisation de next/navigation
+import { useRouter } from "next/navigation"; // Utilisation de next/navigation
 
 const ProfileDropdown: React.FC = () => {
   const { changeUser } = useUser();

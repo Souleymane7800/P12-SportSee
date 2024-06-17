@@ -52,4 +52,18 @@ export const getUserPerformance = async (userId: number): Promise<any> => {
   }
 };
 
+export const getCalorieCount = async (userId: number): Promise<any> => {
+  try {
+    const response = await fetch(`http://localhost:3000/user/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data.data.keyData.calorieCount);
+    return data.data.keyData.calorieCount;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw new Error(`Error fetching data: ${error}`);
+  }
+};
 

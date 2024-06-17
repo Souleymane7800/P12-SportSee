@@ -21,7 +21,9 @@ export class DataFormatter {
     return dayString.toString(); // Extract date portion assuming YYYY-MM-DD format
   }
 
-  static performanceDataFormatter(session: Session): { value: number; kind: string }[] {
+  static performanceDataFormatter(
+    session: Session,
+  ): { value: number; kind: string }[] {
     const kindMap: { [key: number]: string } = {
       1: "Cardio",
       2: "Energie",
@@ -50,10 +52,16 @@ export class DataFormatter {
     return newOrder.map((kind) => newData?.find((obj) => obj.kind === kind)!);
   }
 
-  static kpiDataFormatter(userData: any): {score: number; remaining:number} {
+  static kpiDataFormatter(userData: any): { score: number; remaining: number } {
     const scores = userData?.data?.todayScore || userData?.data?.score;
-      const score = scores * 100; // Format score
-      const remaining = 100 - score;
-      return { score, remaining };
+    const score = scores * 100; // Format score
+    const remaining = 100 - score;
+    return { score, remaining };
+  }
+
+  // A refactoriser
+  static CaloriesDataFormatter(count: number): string {
+    if (count.toString().length < 4) return count.toString();
+    return count.toLocaleString("en-US", { minimumFractionDigits: 0 });
   }
 }

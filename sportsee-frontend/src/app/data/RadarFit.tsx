@@ -20,13 +20,16 @@ export default function RadarFit() {
 
   useEffect(() => {
     const fetchUserPerformance = async () => {
-      try {
-        const data = await getUserPerformance(userId);
-        setUserPerformance(data);
-      } catch (error) {
-        console.error("Error fetching user performance:", error);
+      if (userId) {
+        try {
+          const data = await getUserPerformance(userId);
+          setUserPerformance(data);
+        } catch (error) {
+          console.error("Error fetching user performance:", error);
+        }
       }
     };
+
     fetchUserPerformance();
   }, [userId]);
 

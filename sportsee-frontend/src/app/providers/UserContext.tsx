@@ -4,13 +4,13 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 /**
  * Type for the UserContext
  * @typedef {Object} UserContextType
- * @property {number} userId - The ID of the current user.
+ * @property {number | null} userId - The ID of the current user.
  * @property {function} setUserId - Function to set the user ID.
  * @property {function} changeUser - Function to change the user ID.
  */
 
 interface UserContextType {
-  userId: number;
+  userId: number | null;
   setUserId: (newUserId: number) => void;
   changeUser: (newUserId: number) => void;
 }
@@ -29,7 +29,7 @@ export const UserProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  const [userId, setUserId] = useState<number>(12); // Default userId is 12
+  const [userId, setUserId] = useState<number | null>(null); // No default userId
 
   const changeUser = (id: number): void => {
     setUserId(id);

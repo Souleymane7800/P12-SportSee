@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DailyActivities from "../data/DailyActivities";
 import Goals from "../data/Goals";
 import Radar from "../data/RadarFit";
@@ -10,24 +10,43 @@ import Proteines from "../data/Proteines";
 import Lipides from "../data/Lipides";
 import { getUserInfos } from "../API/GetData";
 import { useUser } from "../providers/UserContext";
-import { UserProvider } from "../providers/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function PageContent() {
-  const { userId, setUserId, changeUser } = useUser();
-  console.log(userId);
-
+  const { userId, changeUser } = useUser();
+  const router = useRouter();
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (userId) {
-        const userData = await getUserInfos(userId);
-        setUserData(userData?.data?.userInfos || {});
+        try {
+          const userData = await getUserInfos(userId);
+          setUserData(userData?.data?.userInfos || {});
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
       }
     };
 
     fetchUserInfo();
   }, [userId]);
+
+  useEffect(() => {
+    if (userId === null) {
+      router.push("/"); // Redirige vers la page d'accueil si userId n'est pas défini
+    }
+  }, [userId, router]);
+
+  if (userId === null) {
+    return (
+      <div className="flex h-[calc(100vh-91px)] flex-grow items-center justify-center pl-[107px]">
+        <p className="text-2xl text-red-500">
+         Aucun utilisateur n'est sélectionné, veuillez choisir un utilisateur.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-[calc(100vh-91px w-[]calc(100vh-117px)] flex-grow pl-[107px]">

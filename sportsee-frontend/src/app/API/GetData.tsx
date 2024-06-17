@@ -96,3 +96,18 @@ export const getGlucideCount = async (userId: number): Promise<any> => {
     throw new Error(`Error fetching data: ${error}`);
   }
 };
+
+export const getLipideCount = async (userId: number): Promise<any> => {
+  try {
+    const response = await fetch(`http://localhost:3000/user/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data.data.keyData.lipidCount);
+    return data.data.keyData.lipidCount;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw new Error(`Error fetching data: ${error}`);
+  }
+};

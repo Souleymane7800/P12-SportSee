@@ -12,7 +12,11 @@ const UserFitness = () => {
   useEffect(() => {
     setUserId(userIdNumber);
   }, [userIdNumber, setUserId]);
-  return <RadarFit />;
+  return (
+    <div className="grid place-items-center pt-48">
+      <RadarFit />
+    </div>
+  );
 };
 
 export default UserFitness;

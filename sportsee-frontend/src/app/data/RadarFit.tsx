@@ -10,38 +10,57 @@ import {
   PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
+import mockedData from '../../../public/mockData/mockedData.json';
 
-export default function RadarFit() {
+interface RadarFitProps {
+  useMockedData: boolean;
+}
+
+export default function RadarFit({ useMockedData }: RadarFitProps) {
   const { userId } = useUser();
-  console.log(userId);
-
   const [userPerformance, setUserPerformance] = useState<any>(null);
-  console.log(userPerformance);
+  const [dataSource, setDataSource] = useState<string>("");
 
   useEffect(() => {
     const fetchUserPerformance = async () => {
       if (userId) {
-        try {
-          const data = await getUserPerformance(userId);
-          setUserPerformance(data);
-        } catch (error) {
-          console.error("Error fetching user performance:", error);
+        if (useMockedData) {
+          console.log("Utilisation des données mockées pour RadarFit");
+          const mockedPerformance = mockedData.USER_PERFORMANCE.find(
+            (user: { userId: number }) => user.userId === (userId)
+          );
+          console.log("Données mockées récupérées pour RadarFit:", mockedPerformance);
+          setUserPerformance(mockedPerformance);
+          setDataSource("Données mockées");
+        } else {
+          console.log("Utilisation de l'API pour RadarFit");
+          try {
+            const data = await getUserPerformance(userId);
+            console.log("Données API récupérées pour RadarFit:", data);
+            setUserPerformance(data);
+            setDataSource("Données API");
+          } catch (error) {
+            console.error("Error fetching user performance:", error);
+            setDataSource("Erreur de chargement");
+          }
         }
       }
     };
 
     fetchUserPerformance();
-  }, [userId]);
+  }, [userId, useMockedData]);
 
   let formattedData: { value: number; kind: string }[] = [];
   if (userPerformance) {
     formattedData = DataFormatter.performanceDataFormatter(userPerformance);
-
-    console.log(formattedData);
   }
 
   return (
-    <div className="dropshadow2 h-[263px] w-[258px] place-items-center rounded-sm border bg-[#FBFBFB]">
+    <div className="dropshadow2 relative h-[263px] w-[258px] place-items-center rounded-sm bg-[#FBFBFB]">
+      {/* Indicateur de source de données */}
+      <div className="absolute right-2 top-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded z-10">
+        {dataSource}
+      </div>
       {!userPerformance && (
         <p className="pt-[100px] text-center text-base font-medium text-[#F04438]">
           Une erreur est survenue lors de la récupération des données. Veuillez
@@ -77,3 +96,4 @@ export default function RadarFit() {
     </div>
   );
 }
+

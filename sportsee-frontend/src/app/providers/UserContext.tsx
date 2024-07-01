@@ -10,7 +10,7 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
  */
 
 interface UserContextType {
-  userId: number | null;
+  userId: number | undefined;
   setUserId: (newUserId: number) => void;
   changeUser: (newUserId: number) => void;
 }
@@ -29,7 +29,7 @@ export const UserProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  const [userId, setUserId] = useState<number | null>(null); // No default userId
+  const [userId, setUserId] = useState<number>(); // No default userId
 
   const changeUser = (id: number): void => {
     setUserId(id);

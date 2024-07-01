@@ -16,14 +16,18 @@ export class DataFormatter {
       Calories: session.calories,
     };
   }
-
+ 
   static formatSessionDate(dayString: string): string {
-    return dayString.toString(); // Extract date portion assuming YYYY-MM-DD format
+    if (!dayString) return "";
+    
+    const parts = dayString.split("-");
+    if (parts.length !== 3) return "";
+    
+    // Parse the day and remove leading zero if present
+    const day = parseInt(parts[2], 10);
+    return day.toString();
   }
-
-  static performanceDataFormatter(
-    session: Session,
-  ): { value: number; kind: string }[] {
+  static performanceDataFormatter(session: any): { value: number; kind: string }[] {
     const kindMap: { [key: number]: string } = {
       1: "Cardio",
       2: "Energie",
@@ -32,7 +36,7 @@ export class DataFormatter {
       5: "Vitesse",
       6: "Intensité",
     };
-
+  
     const newOrder: string[] = [
       "Intensité",
       "Vitesse",
@@ -41,15 +45,33 @@ export class DataFormatter {
       "Energie",
       "Cardio",
     ];
-
+  
+    // Déterminer la source des données (API ou mockées)
+    let performanceData: Array<{ value: number; kind: number }>;
+    if (session?.data?.data) {
+      // Structure de l'API
+      performanceData = session.data.data;
+    } else if (session?.data) {
+      // Structure possible des données mockées
+      performanceData = session.data;
+    } else if (Array.isArray(session)) {
+      // Autre structure possible des données mockées
+      performanceData = session;
+    } else {
+      console.error("Format de données non reconnu");
+      return [];
+    }
+  
     // Map session data to new format with kind as string
-    const newData = session?.data.data.map(({ value, kind }) => ({
+    const newData = performanceData.map(({ value, kind }: { value: number; kind: number }) => ({
       value,
-      kind: kindMap[kind],
+      kind: kindMap[kind] || `Unknown (${kind})`,
     }));
-
+  
     // Return the newData sorted according to newOrder
-    return newOrder.map((kind) => newData?.find((obj) => obj.kind === kind)!);
+    return newOrder.map((kind) => 
+      newData.find((obj) => obj.kind === kind) || { value: 0, kind }
+    );
   }
 
   static kpiDataFormatter(userData: any): { score: number; remaining: number } {

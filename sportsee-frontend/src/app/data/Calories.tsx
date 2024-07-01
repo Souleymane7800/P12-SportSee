@@ -3,34 +3,57 @@ import React, { useEffect, useState } from "react";
 import { DataFormatter } from "../utils/dataFormatter";
 import { getCalorieCount } from "../API/GetData";
 import { useUser } from "../providers/UserContext";
+import mockedData from '../../../public/mockData/mockedData.json';
 
-export default function Calories() {
-  const {userId} = useUser();
+interface CaloriesProps {
+  useMockedData: boolean;
+}
+
+export default function Calories({ useMockedData }: CaloriesProps) {
+  const { userId } = useUser();
   const [calorieCount, setCalorieCount] = useState<number | null>(null);
-console.log(calorieCount);
+  const [dataSource, setDataSource] = useState<string>("");
 
   useEffect(() => {
     const fetchCalorieCount = async () => {
       if (userId) {
-        try {
-          const calorieData = await getCalorieCount(userId);
-          console.log(calorieData);
-          
-          setCalorieCount(calorieData);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
+        if (useMockedData) {
+          console.log("Utilisation des données mockées pour Calories");
+          const mockedUser = mockedData.USER_MAIN_DATA.find(
+            (user: { id: number }) => user.id === (userId)
+          );
+          const mockedCalorieCount = mockedUser?.keyData?.calorieCount;
+          console.log("Données mockées récupérées pour Calories:", mockedCalorieCount);
+          setCalorieCount(mockedCalorieCount || null);
+          setDataSource("Données mockées");
+        } else {
+          console.log("Utilisation de l'API pour Calories");
+          try {
+            const calorieData = await getCalorieCount(userId);
+            console.log("Données API récupérées pour Calories:", calorieData);
+            setCalorieCount(calorieData);
+            setDataSource("Données API");
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            setDataSource("Erreur de chargement");
+          }
         }
       }
     };
 
     fetchCalorieCount();
-  }, [userId]);
+  }, [userId, useMockedData]);
 
-  const caloriesCountDataFormatted = calorieCount !== null ? DataFormatter.CaloriesDataFormatter(calorieCount) + "kCal" : "Données non disponibles"
-  console.log(caloriesCountDataFormatted);
-  
+  const caloriesCountDataFormatted = typeof calorieCount === 'number' && !isNaN(calorieCount)
+    ? `${DataFormatter.CaloriesDataFormatter(calorieCount)}kCal`
+    : "Données non disponibles";
+
   return (
-    <div className="dropshadow2 flex h-[124px] w-[258px] items-center bg-[#FBFBFB] pl-8">
+    <div className="dropshadow2 relative flex h-[124px] w-[258px] items-center bg-[#FBFBFB] pl-8">
+      {/* Indicateur de source de données */}
+      <div className="absolute right-2 top-2 text-xs text-black bg-gray-200 px-2 py-1 rounded">
+        {dataSource}
+      </div>
       <div className="flex space-x-[24px]">
         <Image
           src="/assets/calories-icon.svg"

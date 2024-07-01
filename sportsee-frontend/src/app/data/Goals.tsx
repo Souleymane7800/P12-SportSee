@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useUser } from "../providers/UserContext";
 import { getUserSessions } from "../API/GetData";
+import { useUser } from "../providers/UserContext";
 import {
   LineChart,
   Line,
@@ -8,8 +8,8 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  Rectangle,
 } from "recharts";
+import mockedData from '../../../public/mockData/mockedData.json';
 
 interface Session {
   day: number;
@@ -17,131 +17,113 @@ interface Session {
 }
 
 interface CustomTooltipProps {
-  payload?: any;
+  active?: boolean;
+  payload?: any[];
 }
 
-export default function Goals() {
-  const { userId } = useUser();
-  console.log(userId);
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip bg-white p-2">
+        <p className="label">{`${payload[0].value} min`}</p>
+      </div>
+    );
+  }
+  return null;
+};
 
-  const [sessionData, setSessionData] = useState<any>(null);
-  console.log(sessionData);
+interface GoalsProps {
+  useMockedData: boolean;
+}
+
+const Goals: React.FC<GoalsProps> = ({ useMockedData }) => {
+  const { userId } = useUser();
+  const [sessionsData, setSessionsData] = useState<Session[]>([]);
+  const [dataSource, setDataSource] = useState<string>("");
 
   useEffect(() => {
-    const fetchSessionData = async () => {
-      try {
-        if (userId) {
-          const sessionData = await getUserSessions(userId);
-          setSessionData(sessionData?.data?.sessions || []);
+    const fetchSessionsData = async () => {
+      if (userId) {
+        if (useMockedData) {
+          console.log("Utilisation des données mockées pour Goals");
+          const mockedUser = mockedData.USER_AVERAGE_SESSIONS.find(
+            (user: { userId: number }) => user.userId === (userId)
+          );
+          console.log("Données mockées récupérées pour Goals:", mockedUser?.sessions);
+          setSessionsData(mockedUser?.sessions || []);
+          setDataSource("Données mockées");
+        } else {
+          console.log("Utilisation de l'API pour Goals");
+          try {
+            const userData = await getUserSessions(userId);
+            console.log("Données API récupérées pour Goals:", userData?.data?.sessions);
+            setSessionsData(userData?.data?.sessions || []);
+            setDataSource("Données API");
+          } catch (error) {
+            console.error("Erreur lors de la récupération des données API pour Goals:", error);
+            setDataSource("Erreur de chargement");
+          }
         }
-      } catch (error) {
-        console.error("Error fetching user average sessions:", error);
       }
     };
-    fetchSessionData();
-  }, [userId]);
+    fetchSessionsData();
+  }, [userId, useMockedData]);
 
-  let LineChartData: { day: number; sessionLength: number }[] = [];
-  if (sessionData) {
-    LineChartData = sessionData?.data?.sessions.map((session: Session) => ({
-      day: session.day,
-      sessionLength: session.sessionLength,
-    }));
-  }
+  useEffect(() => {
+    console.log("Données de sessions mises à jour pour Goals:", sessionsData);
+  }, [sessionsData]);
 
-  const CustomCursor = (props: any) => {
-    const { points, width, height } = props;
-    const { x, y } = points[0];
-    const left = x - width;
-
-    return (
-      <Rectangle
-        x={left}
-        y={y - 5}
-        width={width}
-        height={height + 10}
-        stroke="transparent"
-        fill="black"
-        fillOpacity="0.18"
-      />
-    );
-  };
-
-  const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
-    if (payload && payload.length) {
-      return (
-        <div className="h-[34px] w-[50px] p-0">
-          <div className="flex">
-            <p className="bg-white p-2 text-center text-[10px] font-medium">
-              {`${payload[0].value} min`}
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const CustomXAxisTick = (props: any) => {
-    const { x, y, payload } = props;
-    const days = ["L", "M", "M", "J", "V", "S", "D"];
-    return (
-      <g
-        transform={`translate(${x},${y})`}
-        className="absolute bottom-4 left-[14px] flex w-[229px] justify-between text-[12px] uppercase text-white opacity-50"
-      >
-        <text
-          x={0}
-          y={0}
-          dy={16}
-          textAnchor="middle"
-          fill="#FFFFFF"
-          opacity="0.5"
-        >
-          {days[payload.value - 1]}
-        </text>
-      </g>
-    );
-  };
+  const dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
   return (
-    <div className="dropshadow2 relative h-[263px] w-[258px] rounded-md border bg-red-600">
-      <h2 className="absolute pl-[34px] pt-[29px] text-[15px] font-medium leading-6 text-white">
-        Durée moyenne des <br /> sessions
+    <div className="relative h-[263px] w-[258px] rounded-md bg-[#FF0000]">
+      <h2 className="absolute left-[34px] top-[29px] w-[147px] text-[15px] font-medium leading-[24px] text-[#FFFFFF] opacity-50">
+        Durée moyenne des sessions
       </h2>
-      {!sessionData?.length && (
+      {/* Indicateur de source de données */}
+      <div className="absolute right-2 top-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded">
+        {dataSource}
+      </div>
+      {sessionsData.length === 0 ? (
         <p className="pt-[100px] text-center text-base font-medium text-white">
           Une erreur est survenue lors de la récupération des données. Veuillez
           réessayer plus tard.
         </p>
-      )}
-      {sessionData?.length && (
+      ) : (
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={sessionData}>
-            <XAxis
-              dataKey="day"
-              axisLine={false}
-              tickLine={false}
-              tick={<CustomXAxisTick />}
+          <LineChart
+            width={258}
+            height={263}
+            data={sessionsData}
+            margin={{ top: 80, right: 15, left: 15, bottom: 20 }}
+          >
+            <XAxis 
+              dataKey="day" 
+              axisLine={false} 
+              tickLine={false} 
+              tick={{ fill: "#FFFFFF", opacity: 0.5 }}
+              tickFormatter={(value) => dayLabels[value - 1]}
             />
-            <YAxis domain={["dataMin - 20", "dataMax + 45"]} hide={true} />
-            <Tooltip
-              content={<CustomTooltip />}
-              offset={-10}
-              cursor={<CustomCursor />}
-              position={{ y: 50 }}
-            />
-
+            <YAxis hide domain={["dataMin - 10", "dataMax + 10"]} />
+            <Tooltip content={<CustomTooltip />} />
             <Line
-              type="monotone"
+              type="natural"
               dataKey="sessionLength"
-              stroke="#fff"
+              stroke="#FFFFFF"
               strokeWidth={2}
               dot={false}
+              activeDot={{
+                stroke: "rgba(255, 255, 255, 0.5)",
+                strokeWidth: 10,
+                r: 5,
+              }}
             />
           </LineChart>
         </ResponsiveContainer>
       )}
     </div>
   );
-}
+};
+
+export default Goals;
+

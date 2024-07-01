@@ -24,25 +24,21 @@ const MyComponent = () => {
 
   const handleUserInfos = async () => {
     const fetchData = await getUserInfos(userId);
-    console.log(fetchData);
     setUserData(fetchData);
   };
 
   const handleUserActivities = async () => {
     const fetchData = await getUserActivities(userId);
-    console.log(fetchData);
     setUserActivity(fetchData);
   };
 
   const handleUserSessionData = async () => {
     const fetchData = await getUserSessions(userId);
-    console.log(fetchData);
     setSessionData(fetchData);
   };
 
   const handleUserPerformance = async () => {
     const fetchData = await getUserPerformance(userId);
-    console.log(fetchData);
     setUserPerformance(fetchData);
   };
 
@@ -55,7 +51,7 @@ const MyComponent = () => {
           </h2>
           <input
             type="number"
-            className="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="rounded-md  border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
             value={userId}
             onChange={(e) => setUserId(Number(e.target.value))}
             placeholder="Enter User ID"

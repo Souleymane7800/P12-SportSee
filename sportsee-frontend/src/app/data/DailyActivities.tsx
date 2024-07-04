@@ -12,7 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import mockedData from '../../../public/mockData/mockedData.json';
+import mockedData from "../../../public/mockData/mockedData.json";
 
 interface Session {
   day: string;
@@ -27,7 +27,15 @@ interface CustomTooltipProps {
 const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
   if (payload && payload.length) {
     return (
-      <div className="custom-tooltip grid h-[63px] w-[46px] place-items-center bg-[#E60000] text-[10px] font-medium text-white">
+      <div
+        className="custom-tooltip grid h-[63px] w-[46px] place-items-center bg-[#E60000] text-[10px] font-medium text-white"
+        style={{
+          transform: "translateY(-100%)",
+          marginTop: "-60px",
+          position: "relative",
+          left: "5px",
+        }}
+      >
         <p>{payload[0].value}kg</p>
         <p>{payload[1].value}Kcal</p>
       </div>
@@ -36,10 +44,8 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
   return null;
 };
 
-// Composant de légende personnalisé
 const CustomLegend = (props: any) => {
   const { payload } = props;
-  // Define custom labels based on data series
   const labels = ["Poids (kg)", "Calories brûlées (kCal)"];
   return (
     <div className="pt-[24px flex flex-row items-center justify-between pl-[32px]">
@@ -61,7 +67,7 @@ const CustomLegend = (props: any) => {
                 backgroundColor: entry.color,
               }}
             ></span>
-            {labels[index]} {/* Use labels based on index */}
+            {labels[index]}
           </li>
         ))}
       </ul>
@@ -81,20 +87,16 @@ const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
     const fetchActivityData = async () => {
       if (userId) {
         if (useMockedData) {
-          // Utilisez les données mockées
-          console.log("Utilisation des données mockées pour DailyActivities");
-          const mockedUser = mockedData.USER_ACTIVITY.find((user: { userId: number; }) => user.userId === (userId));
-          console.log("Données mockées récupérées :", mockedUser?.sessions);
+          const mockedUser = mockedData.USER_ACTIVITY.find(
+            (user: { userId: number }) => user.userId === userId,
+          );
           setActivityData(mockedUser?.sessions || []);
         } else {
-          // Utilisez l'API
-          console.log("Utilisation de l'API pour DailyActivities");
           try {
             const userData = await getUserActivities(userId);
-            console.log("Données API récupérées :", userData?.data?.sessions);
             setActivityData(userData?.data?.sessions || []);
           } catch (error) {
-            console.error("Erreur lors de la récupération des données API :", error);
+            setActivityData([]);
           }
         }
       }
@@ -102,16 +104,10 @@ const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
     fetchActivityData();
   }, [userId, useMockedData]);
 
-  useEffect(() => {
-    console.log("Données d'activité mises à jour :", activityData);
-  }, [activityData]);
-
   const activityDataFormatted =
     activityData?.map((session: Session) =>
       DataFormatter.activityDataFormatter(session),
     ) || [];
-
-  console.log("Données d'activité formatées :", activityDataFormatted);
 
   return (
     <div className="mx-auto flex h-[320px] w-[835px] items-center justify-center bg-gray-50">
@@ -128,7 +124,7 @@ const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
             barGap={10}
             data={activityDataFormatted}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid strokeDasharray="2 2" vertical={false} />
             <XAxis
               dataKey="day"
               axisLine={false}
@@ -173,7 +169,6 @@ const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
 
 export default DailyActivities;
 
-
 // import React, { useEffect, useState } from "react";
 // import { getUserActivities } from "../API/GetData";
 // import { useUser } from "../providers/UserContext";
@@ -188,6 +183,7 @@ export default DailyActivities;
 //   Legend,
 //   ResponsiveContainer,
 // } from "recharts";
+// import mockedData from "../../../public/mockData/mockedData.json";
 
 // interface Session {
 //   day: string;
@@ -202,7 +198,15 @@ export default DailyActivities;
 // const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
 //   if (payload && payload.length) {
 //     return (
-//       <div className="custom-tooltip grid h-[63px] w-[46px] place-items-center bg-[#E60000] text-[10px] font-medium text-white">
+//       <div
+//         className="custom-tooltip grid h-[63px] w-[46px] place-items-center bg-[#E60000] text-[10px] font-medium text-white"
+//         style={{
+//           transform: "translateY(-100%)",
+//           marginTop: "-60px",
+//           position: "relative",
+//           left: "5px",
+//         }}
+//       >
 //         <p>{payload[0].value}kg</p>
 //         <p>{payload[1].value}Kcal</p>
 //       </div>
@@ -244,30 +248,52 @@ export default DailyActivities;
 //   );
 // };
 
-// const DailyActivities = () => {
+// interface DailyActivitiesProps {
+//   useMockedData: boolean;
+// }
+
+// const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
 //   const { userId } = useUser();
 //   const [activityData, setActivityData] = useState<any>(null);
-  
 
 //   useEffect(() => {
 //     const fetchActivityData = async () => {
 //       if (userId) {
-//         const userData = await getUserActivities(userId);
-//         setActivityData(userData?.data?.sessions || []);
+//         if (useMockedData) {
+//           // Utilisez les données mockées
+//           console.log("Utilisation des données mockées pour DailyActivities");
+//           const mockedUser = mockedData.USER_ACTIVITY.find(
+//             (user: { userId: number }) => user.userId === userId,
+//           );
+//           console.log("Données mockées récupérées :", mockedUser?.sessions);
+//           setActivityData(mockedUser?.sessions || []);
+//         } else {
+//           // Utilisez l'API
+//           console.log("Utilisation de l'API pour DailyActivities");
+//           try {
+//             const userData = await getUserActivities(userId);
+//             console.log("Données API récupérées :", userData?.data?.sessions);
+//             setActivityData(userData?.data?.sessions || []);
+//           } catch (error) {
+//             console.error(
+//               "Erreur lors de la récupération des données API :",
+//               error,
+//             );
+//           }
+//         }
 //       }
 //     };
 //     fetchActivityData();
-//   }, [userId]);
+//   }, [userId, useMockedData]);
+
+//   useEffect(() => {
+//     console.log("Données d'activité mises à jour :", activityData);
+//   }, [activityData]);
 
 //   const activityDataFormatted =
 //     activityData?.map((session: Session) =>
 //       DataFormatter.activityDataFormatter(session),
 //     ) || [];
-
-//   // const options = {
-//   //   barThickness: 10, // Set global bar width
-//   // };
-  
 
 //   return (
 //     <div className="mx-auto flex h-[320px] w-[835px] items-center justify-center bg-gray-50">
@@ -284,7 +310,7 @@ export default DailyActivities;
 //             barGap={10}
 //             data={activityDataFormatted}
 //           >
-//             <CartesianGrid strokeDasharray="3 3" vertical={false} />
+//             <CartesianGrid strokeDasharray="2 2" vertical={false} />
 //             <XAxis
 //               dataKey="day"
 //               axisLine={false}
@@ -324,7 +350,6 @@ export default DailyActivities;
 //         </ResponsiveContainer>
 //       )}
 //     </div>
-
 //   );
 // };
 

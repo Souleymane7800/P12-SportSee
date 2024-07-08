@@ -40,7 +40,7 @@ export default function Glucides({ useMockedData }: GlucidesProps) {
     : "Données non disponibles";
 
   return (
-    <div className="dropshadow2 relative flex h-[124px] w-[258px] items-center bg-[#FBFBFB] pl-8">
+    <div className="dropshadow2 relative flex h-[124px] w-[258px] items-center bg-[#FBFBFB] pl-8 lg:pl-4 border-2 border-gray-300">
       <div className="flex space-x-[24px]">
         <Image
           src="/assets/carbs-icon.svg"

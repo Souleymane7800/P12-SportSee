@@ -42,8 +42,8 @@ export default function Calories({ useMockedData }: CaloriesProps) {
       : "Données non disponibles";
 
   return (
-    <div className="dropshadow2 relative flex h-[124px] w-[258px] items-center bg-[#FBFBFB] pl-8">
-      <div className="flex space-x-[24px]">
+    <div className="dropshadow2 relative flex h-[124px] w-[258px] items-center bg-[#FBFBFB] pl-8 lg:pl-4 border-2 border-gray-300">
+      <div className="flex space-x-[24px] lg:space-x-[12px]">
         <Image
           src="/assets/calories-icon.svg"
           alt="calories"

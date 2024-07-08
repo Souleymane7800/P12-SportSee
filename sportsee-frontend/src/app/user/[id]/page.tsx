@@ -17,7 +17,7 @@ const UserProfile = () => {
           try {
             const userData = await getUserInfos(parseInt(id, 10));
             setUserData(userData?.data?.userInfos || {});
-            changeUser(parseInt(id, 10)); // Mettez à jour le contexte utilisateur
+            changeUser(parseInt(id, 10));
           } catch (error) {
             console.error("Error fetching user information:", error);
           }

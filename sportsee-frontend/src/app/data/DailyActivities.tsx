@@ -110,7 +110,7 @@ const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
     ) || [];
 
   return (
-    <div className="mx-auto flex h-[320px] w-[835px] items-center justify-center bg-gray-50">
+    <div className="mx-auto flex h-[320px] w-[835px] lg:w-[817px] items-center justify-center bg-gray-50">
       {activityData === null || activityData.length === 0 ? (
         <p className="pt-[50px] text-center text-base font-bold text-[#F04438]">
           Une erreur est survenue lors de la récupération des données. Veuillez

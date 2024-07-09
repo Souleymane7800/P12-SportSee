@@ -14,33 +14,6 @@ export const metadata: Metadata = {
   description: "Sport Analytics Dashboard",
 };
 
-// const faviconLinks = [
-//   {
-//     rel: "apple-touch-icon",
-//     sizes: "180x180",
-//     href: "/apple-touch-icon.png",
-//   },
-//   {
-//     rel: "icon",
-//     type: "image/png",
-//     sizes: "32x32",
-//     href: "/favicon-32x32.png",
-//   },
-//   {
-//     rel: "icon",
-//     type: "image/png",
-//     sizes: "16x16",
-//     href: "/favicon-16x16.png",
-//   },
-// ];
-
-// const metaTags = [
-//   { name: "manifest", content: "/site.webmanifest" },
-//   { name: "msapplication-TileColor", content: "#da532c" },
-//   { name: "theme-color", content: "#ffffff" },
-//   { rel: "mask-icon", href: "/safari-pinned-tab.svg", color: "#5bbad5" },
-// ];
-
 export default function RootLayout({
   children,
 }: Readonly<{

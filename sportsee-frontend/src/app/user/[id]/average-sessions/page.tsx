@@ -15,7 +15,7 @@ const UserAverageSession = () => {
 
   return (
     <div className="grid place-items-center gap-4 pt-48">
-      <Goals />
+      <Goals useMockedData={false} />
     </div>
   );
 };

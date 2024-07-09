@@ -16,18 +16,20 @@ export class DataFormatter {
       Calories: session.calories,
     };
   }
- 
+
   static formatSessionDate(dayString: string): string {
     if (!dayString) return "";
-    
+
     const parts = dayString.split("-");
     if (parts.length !== 3) return "";
-    
+
     // Parse the day and remove leading zero if present
     const day = parseInt(parts[2], 10);
     return day.toString();
   }
-  static performanceDataFormatter(session: any): { value: number; kind: string }[] {
+  static performanceDataFormatter(
+    session: any,
+  ): { value: number; kind: string }[] {
     const kindMap: { [key: number]: string } = {
       1: "Cardio",
       2: "Energie",
@@ -36,7 +38,7 @@ export class DataFormatter {
       5: "Vitesse",
       6: "Intensité",
     };
-  
+
     const newOrder: string[] = [
       "Intensité",
       "Vitesse",
@@ -45,7 +47,7 @@ export class DataFormatter {
       "Energie",
       "Cardio",
     ];
-  
+
     // Déterminer la source des données (API ou mockées)
     let performanceData: Array<{ value: number; kind: number }>;
     if (session?.data?.data) {
@@ -61,16 +63,18 @@ export class DataFormatter {
       console.error("Format de données non reconnu");
       return [];
     }
-  
+
     // Map session data to new format with kind as string
-    const newData = performanceData.map(({ value, kind }: { value: number; kind: number }) => ({
-      value,
-      kind: kindMap[kind] || `Unknown (${kind})`,
-    }));
-  
+    const newData = performanceData.map(
+      ({ value, kind }: { value: number; kind: number }) => ({
+        value,
+        kind: kindMap[kind] || `Unknown (${kind})`,
+      }),
+    );
+
     // Return the newData sorted according to newOrder
-    return newOrder.map((kind) => 
-      newData.find((obj) => obj.kind === kind) || { value: 0, kind }
+    return newOrder.map(
+      (kind) => newData.find((obj) => obj.kind === kind) || { value: 0, kind },
     );
   }
 

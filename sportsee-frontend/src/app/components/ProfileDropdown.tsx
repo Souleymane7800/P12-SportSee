@@ -27,9 +27,13 @@ const ProfileDropdown: React.FC = () => {
 
   return (
     <div className="relative">
-      <li onClick={handleProfileClick} style={{ cursor: "pointer" }}>
+      <button
+        onClick={handleProfileClick}
+        style={{ cursor: "pointer" }}
+        className="text-white-700 border-none bg-transparent"
+      >
         Profil
-      </li>
+      </button>
       {showDropdown && (
         <div className="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
           <ul className="py-1">

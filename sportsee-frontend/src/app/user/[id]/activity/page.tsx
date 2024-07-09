@@ -19,11 +19,10 @@ const UserActivity = () => {
 
   return (
     <div className="grid place-items-center gap-4 pt-48">
-      {/* <DailyActivities /> */}
-      <Calories />
-      <Proteines />
-      <Glucides />
-      <Lipides />
+      <Calories useMockedData={false} />
+      <Proteines useMockedData={false} />
+      <Glucides useMockedData={false} />
+      <Lipides useMockedData={false} />
     </div>
   );
 };

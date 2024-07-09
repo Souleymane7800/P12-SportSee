@@ -14,7 +14,7 @@ const UserFitness = () => {
   }, [userIdNumber, setUserId]);
   return (
     <div className="grid place-items-center pt-48">
-      <RadarFit />
+      <RadarFit useMockedData={false} />
     </div>
   );
 };

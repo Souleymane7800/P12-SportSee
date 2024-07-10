@@ -14,16 +14,30 @@ import {
 } from "recharts";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Represents a single activity session.
+ * @interface Session
+ */
 interface Session {
   day: string;
   kilogram: number;
   calories: number;
 }
 
+/**
+ * Props for the CustomTooltip component.
+ * @interface CustomTooltipProps
+ */
 interface CustomTooltipProps {
   payload: { value: number }[];
 }
 
+/**
+ * CustomTooltip component - Renders a custom tooltip for the bar chart.
+ * @component
+ * @param {CustomTooltipProps} props - The component props
+ * @returns {JSX.Element | null} The rendered CustomTooltip component or null
+ */
 const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
   if (payload && payload.length) {
     return (
@@ -44,6 +58,13 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ payload }) => {
   return null;
 };
 
+/**
+ * CustomLegend component - Renders a custom legend for the bar chart.
+ * @component
+ * @param {Object} props - The component props
+ * @param {Array} props.payload - The legend payload
+ * @returns {JSX.Element} The rendered CustomLegend component
+ */
 const CustomLegend = (props: any) => {
   const { payload } = props;
   const labels = ["Poids (kg)", "Calories brûlées (kCal)"];
@@ -75,15 +96,38 @@ const CustomLegend = (props: any) => {
   );
 };
 
+/**
+ * Props for the DailyActivities component.
+ * @interface DailyActivitiesProps
+ */
 interface DailyActivitiesProps {
   useMockedData: boolean;
 }
 
+/**
+ * DailyActivities component - Displays the user's daily activity data in a bar chart.
+ *
+ * This component:
+ * - Fetches the user's activity data (real or mocked based on the prop)
+ * - Formats the data using DataFormatter
+ * - Renders a bar chart using Recharts library
+ * - Implements custom tooltips and legends
+ * - Handles error states and displays an error message if data is unavailable
+ *
+ * @component
+ * @param {DailyActivitiesProps} props - The component props
+ * @returns {JSX.Element} The rendered DailyActivities component
+ */
 const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
   const { userId } = useUser();
   const [activityData, setActivityData] = useState<any>(null);
 
   useEffect(() => {
+    /**
+     * Fetches the user's activity data.
+     * @async
+     * @function
+     */
     const fetchActivityData = async () => {
       if (userId) {
         if (useMockedData) {
@@ -104,6 +148,10 @@ const DailyActivities: React.FC<DailyActivitiesProps> = ({ useMockedData }) => {
     fetchActivityData();
   }, [userId, useMockedData]);
 
+  /**
+   * Formatted activity data for the chart.
+   * @type {Array}
+   */
   const activityDataFormatted =
     activityData?.map((session: Session) =>
       DataFormatter.activityDataFormatter(session),

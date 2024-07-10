@@ -8,11 +8,25 @@ import Proteines from "@/app/data/Proteines";
 import Glucides from "@/app/data/Glucides";
 import Lipides from "@/app/data/Lipides";
 
+/**
+ * UserActivity component - Displays various user activity and nutrition metrics.
+ *
+ * This component:
+ * - Retrieves the user ID from the URL parameters
+ * - Updates the global user context with the current user ID
+ * - Renders components for displaying calories, proteins, carbohydrates, and lipids data
+ *
+ * @component
+ * @returns {JSX.Element} The rendered UserActivity component
+ */
 const UserActivity = () => {
   const { userId, setUserId } = useUser();
   const { id } = useParams<{ id: string }>();
   const userIdNumber = parseInt(id);
 
+  /**
+   * Effect hook to update the global user context with the current user ID.
+   */
   useEffect(() => {
     setUserId(userIdNumber);
   }, [userIdNumber, setUserId]);

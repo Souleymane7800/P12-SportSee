@@ -4,20 +4,47 @@ import { getUserInfos } from "../API/GetData";
 import { useUser } from "../providers/UserContext";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Props for the Kpi component.
+ * @interface KpiProps
+ */
 interface KpiProps {
+  /** Flag to determine whether to use mocked data */
   useMockedData: boolean;
 }
 
+/**
+ * Represents the structure of user data.
+ * @interface UserData
+ */
 interface UserData {
   todayScore?: number;
   score?: number;
 }
 
+/**
+ * Kpi component - Displays the user's performance score as a pie chart.
+ *
+ * This component:
+ * - Fetches the user's score data (real or mocked based on the prop)
+ * - Calculates the score percentage
+ * - Renders a pie chart representing the score
+ * - Handles error states and displays an error message if data is unavailable
+ *
+ * @component
+ * @param {KpiProps} props - The component props
+ * @returns {JSX.Element} The rendered Kpi component
+ */
 const Kpi: React.FC<KpiProps> = ({ useMockedData }) => {
   const { userId } = useUser();
   const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches the user's information including the score.
+     * @async
+     * @function
+     */
     const fetchUserInfos = async () => {
       if (userId) {
         if (useMockedData) {
@@ -53,7 +80,16 @@ const Kpi: React.FC<KpiProps> = ({ useMockedData }) => {
     );
   }
 
+  /**
+   * Calculates the score percentage.
+   * @type {number}
+   */
   const score = (userData.todayScore || userData.score || 0) * 100;
+
+  /**
+   * Data for the pie chart.
+   * @type {Array<{name: string, value: number}>}
+   */
   const kpiData = [
     { name: "score", value: score },
     { name: "remaining", value: 100 - score },

@@ -4,15 +4,36 @@ import { useUser } from "../providers/UserContext";
 import { getLipideCount } from "../API/GetData";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Props for the Lipides component.
+ * @interface LipidesProps
+ */
 interface LipidesProps {
   useMockedData: boolean;
 }
 
+/**
+ * Lipides component - Displays the user's lipid intake.
+ *
+ * This component:
+ * - Fetches the user's lipid count (real or mocked based on the prop)
+ * - Displays the lipid count along with a fat icon
+ * - Handles error states and displays 'N/A' if data is unavailable
+ *
+ * @component
+ * @param {LipidesProps} props - The component props
+ * @returns {JSX.Element} The rendered Lipides component
+ */
 export default function Lipides({ useMockedData }: LipidesProps) {
   const { userId } = useUser();
   const [lipideCount, setLipideCount] = useState<number | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches the user's lipid count.
+     * @async
+     * @function
+     */
     const fetchLipideCount = async () => {
       if (userId) {
         if (useMockedData) {
@@ -35,6 +56,10 @@ export default function Lipides({ useMockedData }: LipidesProps) {
     fetchLipideCount();
   }, [userId, useMockedData]);
 
+  /**
+   * Formats the lipid count for display.
+   * @type {string}
+   */
   const lipideCountDisplay =
     typeof lipideCount === "number" && !isNaN(lipideCount)
       ? `${lipideCount}g`

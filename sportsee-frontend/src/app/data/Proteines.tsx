@@ -4,15 +4,36 @@ import { useUser } from "../providers/UserContext";
 import { getProteineCount } from "../API/GetData";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Props for the Proteines component.
+ * @interface ProteinesProps
+ */
 interface ProteinesProps {
   useMockedData: boolean;
 }
 
+/**
+ * Proteines component - Displays the user's protein intake.
+ *
+ * This component:
+ * - Fetches the user's protein count (real or mocked based on the prop)
+ * - Displays the protein count along with a protein icon
+ * - Handles error states and displays 'N/A' if data is unavailable
+ *
+ * @component
+ * @param {ProteinesProps} props - The component props
+ * @returns {JSX.Element} The rendered Proteines component
+ */
 export default function Proteines({ useMockedData }: ProteinesProps) {
   const { userId } = useUser();
   const [proteineCount, setProteineCount] = useState<number | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches the user's protein count.
+     * @async
+     * @function
+     */
     const fetchProteineCount = async () => {
       if (userId) {
         if (useMockedData) {
@@ -35,6 +56,10 @@ export default function Proteines({ useMockedData }: ProteinesProps) {
     fetchProteineCount();
   }, [userId, useMockedData]);
 
+  /**
+   * Formats the protein count for display.
+   * @type {string}
+   */
   const proteineCountDisplay =
     typeof proteineCount === "number" && !isNaN(proteineCount)
       ? `${proteineCount}g`

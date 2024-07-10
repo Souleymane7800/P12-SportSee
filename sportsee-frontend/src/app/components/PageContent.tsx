@@ -15,8 +15,21 @@ import { useUser } from "../providers/UserContext";
 import { useRouter } from "next/navigation";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/** Flag to determine whether to use mocked data or API data */
 const USE_MOCKED_DATA = false; // false pour utiliser l'API
 
+/**
+ * PageContent component - Renders the main content of the user's dashboard.
+ *
+ * This component:
+ * - Fetches and displays user information
+ * - Renders various data visualization components (activities, goals, fitness, etc.)
+ * - Handles error states and displays appropriate messages
+ * - Redirects to home if no user is selected
+ *
+ * @component
+ * @returns {JSX.Element} The rendered PageContent component
+ */
 export default function PageContent() {
   const { userId } = useUser();
   const router = useRouter();
@@ -24,6 +37,11 @@ export default function PageContent() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches user information from the API or mocked data.
+     * @async
+     * @function
+     */
     const fetchUserInfo = async () => {
       if (userId) {
         if (USE_MOCKED_DATA) {

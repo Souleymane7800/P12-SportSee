@@ -1,6 +1,17 @@
 import React from "react";
 import Image from "next/image";
 
+/**
+ * Leftbar component - Renders the left sidebar of the application.
+ *
+ * This component:
+ * - Displays a vertical bar with activity icons (yoga, swimming, cycling, weightlifting)
+ * - Shows a copyright notice at the bottom
+ * - Is responsive, hiding on smaller screens and adjusting height for different viewport sizes
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Leftbar component
+ */
 export default function Leftbar() {
   return (
     <div className="hidden h-screen w-[117px] flex-col items-center justify-between bg-[#020203] text-white lg:flex lg:h-[140vh] xl:h-[100vh]">

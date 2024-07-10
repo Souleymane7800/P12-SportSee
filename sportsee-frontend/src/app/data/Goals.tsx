@@ -12,16 +12,30 @@ import {
 } from "recharts";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Represents a single session data point.
+ * @interface Session
+ */
 interface Session {
   day: number;
   sessionLength: number;
 }
 
+/**
+ * Props for the CustomTooltip component.
+ * @interface CustomTooltipProps
+ */
 interface CustomTooltipProps {
   active?: boolean;
   payload?: any[];
 }
 
+/**
+ * CustomTooltip component - Renders a custom tooltip for the line chart.
+ * @component
+ * @param {CustomTooltipProps} props - The component props
+ * @returns {JSX.Element | null} The rendered CustomTooltip component or null
+ */
 const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
@@ -40,6 +54,16 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
   return null;
 };
 
+/**
+ * CustomCursor component - Renders a custom cursor for the line chart.
+ * @component
+ * @param {Object} props - The component props
+ * @param {Array} props.points - The cursor points
+ * @param {number} props.width - The cursor width
+ * @param {number} props.height - The cursor height
+ * @param {number} props.chartHeight - The chart height
+ * @returns {JSX.Element} The rendered CustomCursor component
+ */
 const CustomCursor = ({ points, width, height, chartHeight }: any) => {
   const { x } = points[0];
   const adjustedHeight = chartHeight - 25;
@@ -57,10 +81,27 @@ const CustomCursor = ({ points, width, height, chartHeight }: any) => {
   );
 };
 
+/**
+ * Props for the Goals component.
+ * @interface GoalsProps
+ */
 interface GoalsProps {
   useMockedData: boolean;
 }
 
+/**
+ * Goals component - Displays the user's average session duration over a week.
+ *
+ * This component:
+ * - Fetches the user's session data (real or mocked based on the prop)
+ * - Renders a line chart representing the average session duration
+ * - Implements custom tooltips, cursors, and interactive elements
+ * - Handles error states and displays an error message if data is unavailable
+ *
+ * @component
+ * @param {GoalsProps} props - The component props
+ * @returns {JSX.Element} The rendered Goals component
+ */
 const Goals: React.FC<GoalsProps> = ({ useMockedData }) => {
   const { userId } = useUser();
   const [sessionsData, setSessionsData] = useState<Session[]>([]);
@@ -71,6 +112,11 @@ const Goals: React.FC<GoalsProps> = ({ useMockedData }) => {
   const dotRadius = 4;
 
   useEffect(() => {
+    /**
+     * Fetches the user's session data.
+     * @async
+     * @function
+     */
     const fetchSessionsData = async () => {
       if (userId) {
         if (useMockedData) {
@@ -113,6 +159,13 @@ const Goals: React.FC<GoalsProps> = ({ useMockedData }) => {
     setCursorX(null);
   };
 
+  /**
+   * CustomizedLine component - Renders a custom line for the chart.
+   * @component
+   * @param {Object} props - The component props
+   * @param {Array} props.points - The line points
+   * @returns {JSX.Element | null} The rendered CustomizedLine component or null
+   */
   const CustomizedLine = ({ points }: any) => {
     if (activeIndex === null) return null;
 
@@ -144,6 +197,15 @@ const Goals: React.FC<GoalsProps> = ({ useMockedData }) => {
     );
   };
 
+  /**
+   * CustomizedDot component - Renders a custom dot for the chart.
+   * @component
+   * @param {Object} props - The component props
+   * @param {number} props.cx - The x coordinate
+   * @param {number} props.cy - The y coordinate
+   * @param {number} props.index - The dot index
+   * @returns {JSX.Element | null} The rendered CustomizedDot component or null
+   */
   const CustomizedDot = (props: any) => {
     const { cx, cy, index } = props;
     if (index === activeIndex) {

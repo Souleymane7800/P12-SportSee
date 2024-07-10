@@ -5,15 +5,37 @@ import { getCalorieCount } from "../API/GetData";
 import { useUser } from "../providers/UserContext";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Props for the Calories component.
+ * @interface CaloriesProps
+ */
 interface CaloriesProps {
   useMockedData: boolean;
 }
 
+/**
+ * Calories component - Displays the user's calorie intake.
+ *
+ * This component:
+ * - Fetches the user's calorie count (real or mocked based on the prop)
+ * - Formats the calorie count using DataFormatter
+ * - Displays the formatted calorie count along with a calories icon
+ * - Handles error states and displays 'N/A' if data is unavailable
+ *
+ * @component
+ * @param {CaloriesProps} props - The component props
+ * @returns {JSX.Element} The rendered Calories component
+ */
 export default function Calories({ useMockedData }: CaloriesProps) {
   const { userId } = useUser();
   const [calorieCount, setCalorieCount] = useState<number | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches the user's calorie count.
+     * @async
+     * @function
+     */
     const fetchCalorieCount = async () => {
       if (userId) {
         if (useMockedData) {
@@ -36,6 +58,10 @@ export default function Calories({ useMockedData }: CaloriesProps) {
     fetchCalorieCount();
   }, [userId, useMockedData]);
 
+  /**
+   * Formats the calorie count for display.
+   * @type {string}
+   */
   const caloriesCountDataFormatted =
     typeof calorieCount === "number" && !isNaN(calorieCount)
       ? `${DataFormatter.CaloriesDataFormatter(calorieCount)}kCal`

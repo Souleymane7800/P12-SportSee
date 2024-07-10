@@ -12,15 +12,36 @@ import {
 } from "recharts";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Props for the RadarFit component.
+ * @interface RadarFitProps
+ */
 interface RadarFitProps {
   useMockedData: boolean;
 }
 
+/**
+ * RadarFit component - Displays user performance data in a radar chart.
+ *
+ * This component:
+ * - Fetches user performance data (real or mocked based on the prop)
+ * - Formats the data using DataFormatter
+ * - Renders a radar chart using Recharts library
+ *
+ * @component
+ * @param {RadarFitProps} props - The component props
+ * @returns {JSX.Element} The rendered RadarFit component
+ */
 export default function RadarFit({ useMockedData }: RadarFitProps) {
   const { userId } = useUser();
   const [userPerformance, setUserPerformance] = useState<any>(null);
 
   useEffect(() => {
+    /**
+     * Fetches user performance data.
+     * @async
+     * @function
+     */
     const fetchUserPerformance = async () => {
       if (userId) {
         if (useMockedData) {

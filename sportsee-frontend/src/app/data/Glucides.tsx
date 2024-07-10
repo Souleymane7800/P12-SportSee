@@ -4,15 +4,36 @@ import { useUser } from "../providers/UserContext";
 import { getGlucideCount } from "../API/GetData";
 import mockedData from "../../../public/mockData/mockedData.json";
 
+/**
+ * Props for the Glucides component.
+ * @interface GlucidesProps
+ */
 interface GlucidesProps {
   useMockedData: boolean;
 }
 
+/**
+ * Glucides component - Displays the user's carbohydrate intake.
+ *
+ * This component:
+ * - Fetches the user's carbohydrate count (real or mocked based on the prop)
+ * - Displays the carbohydrate count along with a carbs icon
+ * - Handles error states and displays 'N/A' if data is unavailable
+ *
+ * @component
+ * @param {GlucidesProps} props - The component props
+ * @returns {JSX.Element} The rendered Glucides component
+ */
 export default function Glucides({ useMockedData }: GlucidesProps) {
   const { userId } = useUser();
   const [glucideCount, setGlucideCount] = useState<number | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches the user's carbohydrate count.
+     * @async
+     * @function
+     */
     const fetchGlucideCount = async () => {
       if (userId) {
         if (useMockedData) {
@@ -35,6 +56,10 @@ export default function Glucides({ useMockedData }: GlucidesProps) {
     fetchGlucideCount();
   }, [userId, useMockedData]);
 
+  /**
+   * Formats the carbohydrate count for display.
+   * @type {string}
+   */
   const glucideCountDisplay =
     typeof glucideCount === "number" && !isNaN(glucideCount)
       ? `${glucideCount}g`

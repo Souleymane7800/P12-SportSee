@@ -1,10 +1,25 @@
+/**
+ * Represents the structure of a session object.
+ * @interface
+ */
 interface Session {
   data: {
     data: { value: number; kind: number }[]; // Array of session objects
   };
 }
 
+/**
+ * Utility class for formatting various types of data.
+ */
 export class DataFormatter {
+  /**
+   * Formats activity data.
+   * @param {Object} session - The activity session data.
+   * @param {string} session.day - The day of the activity.
+   * @param {number} session.kilogram - The weight in kilograms.
+   * @param {number} session.calories - The calories burned.
+   * @returns {Object} Formatted activity data.
+   */
   static activityDataFormatter(session: {
     day: string;
     kilogram: number;
@@ -17,6 +32,11 @@ export class DataFormatter {
     };
   }
 
+  /**
+   * Formats a session date.
+   * @param {string} dayString - The date string to format.
+   * @returns {string} Formatted date string.
+   */
   static formatSessionDate(dayString: string): string {
     if (!dayString) return "";
 
@@ -27,40 +47,46 @@ export class DataFormatter {
     const day = parseInt(parts[2], 10);
     return day.toString();
   }
+
+  /**
+   * Formats performance data.
+   * @param {any} session - The performance session data.
+   * @returns {Array<Object>} Formatted performance data.
+   */
   static performanceDataFormatter(
     session: any,
   ): { value: number; kind: string }[] {
     const kindMap: { [key: number]: string } = {
       1: "Cardio",
-      2: "Energie",
+      2: "Energy",
       3: "Endurance",
-      4: "Force",
-      5: "Vitesse",
-      6: "Intensité",
+      4: "Strength",
+      5: "Speed",
+      6: "Intensity",
     };
 
     const newOrder: string[] = [
-      "Intensité",
-      "Vitesse",
-      "Force",
+      "Intensity",
+      "Speed",
+      "Strength",
       "Endurance",
-      "Energie",
+      "Energy",
       "Cardio",
     ];
 
-    // Déterminer la source des données (API ou mockées)
+    // Determine the data source (API or mocked)
     let performanceData: Array<{ value: number; kind: number }>;
     if (session?.data?.data) {
-      // Structure de l'API
+      // API structure
       performanceData = session.data.data;
     } else if (session?.data) {
-      // Structure possible des données mockées
+      // Possible structure of mocked data
       performanceData = session.data;
     } else if (Array.isArray(session)) {
-      // Autre structure possible des données mockées
+      // Another possible structure of mocked data
       performanceData = session;
     } else {
-      console.error("Format de données non reconnu");
+      console.error("Unrecognized data format");
       return [];
     }
 
@@ -78,6 +104,11 @@ export class DataFormatter {
     );
   }
 
+  /**
+   * Formats KPI data.
+   * @param {any} userData - The user data containing KPI information.
+   * @returns {Object} Formatted KPI data.
+   */
   static kpiDataFormatter(userData: any): { score: number; remaining: number } {
     const scores = userData?.data?.todayScore || userData?.data?.score;
     const score = scores * 100; // Format score
@@ -85,7 +116,11 @@ export class DataFormatter {
     return { score, remaining };
   }
 
-  // A refactoriser
+  /**
+   * Formats calorie count data.
+   * @param {number} count - The calorie count to format.
+   * @returns {string} Formatted calorie count.
+   */
   static CaloriesDataFormatter(count: number): string {
     if (count.toString().length < 4) return count.toString();
     return count.toLocaleString("en-US", { minimumFractionDigits: 0 });
